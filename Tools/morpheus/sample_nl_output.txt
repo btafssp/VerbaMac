@@ -1,0 +1,22 @@
+# Captured-style Perseus NL samples for MorpheusOutputParser fixtures.
+# (Illustrative; regenerate with a real cruncher when available.)
+
+# Latin noun
+cactus
+<NL>N cactus  masc nom sg			us_i</NL>
+
+# Latin with quantity underscore in form field (human -P style uses _; NL lemmas vary)
+custodes
+<NL>N custos  masc nom/voc/acc pl			os_otis</NL>
+
+# Greek noun (beta)
+a)/nqrwpos
+<NL>N a)/nqrwpos  masc nom sg			os_ou</NL>
+
+# Greek ignore-accents style (form,lemma)
+a)nqrwpos
+<NL>N a)/nqrwpos,a)/nqrwpos  masc nom sg			os_ou</NL>
+
+# Mixed noun/verb analyses
+a)/nqrwpou
+<NL>N a)nqrw/pou,a)/nqrwpos  masc gen sg			os_ou</NL><NL>V a_)nqrwpou=,a)nqrwpo/omai  imperf ind mp 2nd sg	doric aeolic	contr	ow_pr,ow_denom</NL>

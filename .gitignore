@@ -1,0 +1,29 @@
+# Build output
+build/
+DerivedData/
+.build/
+
+# Importer output / caches
+Tools/importer/out/
+data/cache/
+__pycache__/
+
+# Large lexicon databases (shipped with the GitHub Release app instead)
+*.sqlite
+
+# Xcode / macOS
+xcuserdata/
+.DS_Store
+
+# Python virtualenvs (contain absolute local paths)
+.venv/
+**/.venv/
+
+# Importer TEI download cache (large; re-fetch with Tools/importer/fetch_perseus.sh)
+Tools/importer/data/cache/
+
+# Local archives / backups
+*.tgz
+*.tar
+*.tar.gz
+*.zip

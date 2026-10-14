@@ -1,0 +1,450 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000021 /* VerbaMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000020 /* VerbaMacApp.swift */; };
+		A10000000000000000000023 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000022 /* ContentView.swift */; };
+		A10000000000000000000025 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000024 /* AppState.swift */; };
+		A10000000000000000000027 /* Analysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000026 /* Analysis.swift */; };
+		A10000000000000000000029 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000028 /* Language.swift */; };
+		A1000000000000000000002B /* LexiconArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000002A /* LexiconArticle.swift */; };
+		A1000000000000000000002D /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000002C /* Parser.swift */; };
+		A10000000000000000000031 /* LexiconStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000030 /* LexiconStore.swift */; };
+		A10000000000000000000035 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000034 /* SearchBar.swift */; };
+		A10000000000000000000037 /* AnalysisListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000036 /* AnalysisListView.swift */; };
+		A10000000000000000000039 /* ArticleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000038 /* ArticleView.swift */; };
+		A1000000000000000000003B /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000003A /* AboutView.swift */; };
+		A10000000000000000000043 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000042 /* Assets.xcassets */; };
+		A100000000000000000000F1 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000000000017 /* SwiftUI.framework */; };
+		A100000000000000000000F2 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000000000018 /* WebKit.framework */; };
+		A100000000000000000000F3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000000000019 /* AppKit.framework */; };
+		A10000000000000000000050 /* MorpheusParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000051 /* MorpheusParser.swift */; };
+		A10000000000000000000052 /* MorpheusOutputParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000053 /* MorpheusOutputParser.swift */; };
+		A10000000000000000000054 /* ParserPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000055 /* ParserPipeline.swift */; };
+		A10000000000000000000056 /* MorphPreprocess.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000057 /* MorphPreprocess.swift */; };
+		A10000000000000000000058 /* BetaCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000059 /* BetaCode.swift */; };
+		A1000000000000000000005A /* ParserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000005B /* ParserPreferences.swift */; };
+		A10000000000000000000070 /* ZstdCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000071 /* ZstdCodec.swift */; };
+		A10000000000000000000072 /* SQLiteLexiconDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000073 /* SQLiteLexiconDB.swift */; };
+		A100000000000000000000B0 /* lat.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000B1 /* lat.sqlite */; };
+		A100000000000000000000F8 /* grc.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000F9 /* grc.sqlite */; };
+		A10000000000000000000090 /* Morpheus in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000091 /* Morpheus */; };
+		A100000000000000000000F4 /* Compression.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000000000076 /* Compression.framework */; };
+		A10000000000000000000080 /* ServiceLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000081 /* ServiceLookup.swift */; };
+		A10000000000000000000082 /* WordsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000083 /* WordsParser.swift */; };
+		A10000000000000000000084 /* WordsOutputParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000085 /* WordsOutputParser.swift */; };
+		A100000000000000000000A0 /* GenderRefiner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000A1 /* GenderRefiner.swift */; };
+		A100000000000000000000A2 /* WORDS in Resources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000A3 /* WORDS */; };
+		A100000000000000000000C0 /* LexiconColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000C1 /* LexiconColorScheme.swift */; };
+		A100000000000000000000C2 /* SnappingVSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000C3 /* SnappingVSplitView.swift */; };
+		A100000000000000000000C4 /* ContentTextSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000C5 /* ContentTextSize.swift */; };
+		A100000000000000000000D0 /* AnalysesKeyboardHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000D1 /* AnalysesKeyboardHost.swift */; };
+		A100000000000000000000E0 /* HeadwordHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000E1 /* HeadwordHit.swift */; };
+		B20000000000000000000001 /* NavigationHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000002 /* NavigationHistory.swift */; };
+		B20000000000000000000003 /* CrossReferenceLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000004 /* CrossReferenceLink.swift */; };
+		B20000000000000000000005 /* LatinQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000006 /* LatinQuantity.swift */; };
+		A100000000000000000000E2 /* HeadwordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000E3 /* HeadwordListView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A10000000000000000000020 /* VerbaMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/VerbaMacApp.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000022 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/ContentView.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000024 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/AppState.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000026 /* Analysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Models/Analysis.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000028 /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Models/Language.swift"; sourceTree = SOURCE_ROOT; };
+		A1000000000000000000002A /* LexiconArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Models/LexiconArticle.swift"; sourceTree = SOURCE_ROOT; };
+		A1000000000000000000002C /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Parsing/Parser.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000030 /* LexiconStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Lexicon/LexiconStore.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000034 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Views/SearchBar.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000036 /* AnalysisListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Views/AnalysisListView.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000038 /* ArticleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Views/ArticleView.swift"; sourceTree = SOURCE_ROOT; };
+		A1000000000000000000003A /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Views/AboutView.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000042 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Supporting/Assets.xcassets"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000044 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Supporting/Info.plist"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000016 /* VerbaMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VerbaMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000017 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		A10000000000000000000018 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		A10000000000000000000019 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		A10000000000000000000051 /* MorpheusParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Parsing/MorpheusParser.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000053 /* MorpheusOutputParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Parsing/MorpheusOutputParser.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000055 /* ParserPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Parsing/ParserPipeline.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000057 /* MorphPreprocess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Parsing/MorphPreprocess.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000059 /* BetaCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Parsing/BetaCode.swift"; sourceTree = SOURCE_ROOT; };
+		A1000000000000000000005B /* ParserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Parsing/ParserPreferences.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000061 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Resources/Morpheus/README.md"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000091 /* Morpheus */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources/Morpheus; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000071 /* ZstdCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Lexicon/ZstdCodec.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000073 /* SQLiteLexiconDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Lexicon/SQLiteLexiconDB.swift"; sourceTree = SOURCE_ROOT; };
+		A100000000000000000000B1 /* lat.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Resources/Lexicon/lat.sqlite"; sourceTree = SOURCE_ROOT; };
+		A100000000000000000000F9 /* grc.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Resources/Lexicon/grc.sqlite"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000076 /* Compression.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Compression.framework; path = System/Library/Frameworks/Compression.framework; sourceTree = SDKROOT; };
+		A10000000000000000000081 /* ServiceLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/ServiceLookup.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000083 /* WordsParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Parsing/WordsParser.swift"; sourceTree = SOURCE_ROOT; };
+		A10000000000000000000085 /* WordsOutputParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Parsing/WordsOutputParser.swift"; sourceTree = SOURCE_ROOT; };
+		A100000000000000000000A1 /* GenderRefiner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Lexicon/GenderRefiner.swift"; sourceTree = SOURCE_ROOT; };
+		A100000000000000000000A3 /* WORDS */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources/WORDS; sourceTree = SOURCE_ROOT; };
+		A100000000000000000000C1 /* LexiconColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Models/LexiconColorScheme.swift"; sourceTree = SOURCE_ROOT; };
+		A100000000000000000000C3 /* SnappingVSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Views/SnappingVSplitView.swift"; sourceTree = SOURCE_ROOT; };
+		A100000000000000000000C5 /* ContentTextSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Models/ContentTextSize.swift"; sourceTree = SOURCE_ROOT; };
+		A100000000000000000000D1 /* AnalysesKeyboardHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Views/AnalysesKeyboardHost.swift"; sourceTree = SOURCE_ROOT; };
+		A100000000000000000000E1 /* HeadwordHit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Models/HeadwordHit.swift"; sourceTree = SOURCE_ROOT; };
+		B20000000000000000000006 /* LatinQuantity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Models/LatinQuantity.swift"; sourceTree = SOURCE_ROOT; };
+		B20000000000000000000004 /* CrossReferenceLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Models/CrossReferenceLink.swift"; sourceTree = SOURCE_ROOT; };
+		B20000000000000000000002 /* NavigationHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Models/NavigationHistory.swift"; sourceTree = SOURCE_ROOT; };
+		A100000000000000000000E3 /* HeadwordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sources/VerbaMac/Views/HeadwordListView.swift"; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A10000000000000000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A100000000000000000000F1 /* SwiftUI.framework in Frameworks */,
+				A100000000000000000000F2 /* WebKit.framework in Frameworks */,
+				A100000000000000000000F3 /* AppKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A1000000000000000000000C = {
+			isa = PBXGroup;
+			children = (
+				A1000000000000000000000E /* Sources */,
+				A10000000000000000000013 /* Resources */,
+				A10000000000000000000015 /* Supporting */,
+				A1000000000000000000000D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A1000000000000000000000D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000016 /* VerbaMac.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A1000000000000000000000E /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000020 /* VerbaMacApp.swift */,
+				A10000000000000000000022 /* ContentView.swift */,
+				A10000000000000000000024 /* AppState.swift */,
+				A10000000000000000000081 /* ServiceLookup.swift */,
+				A1000000000000000000000F /* Models */,
+				A10000000000000000000010 /* Parsing */,
+				A10000000000000000000011 /* Lexicon */,
+				A10000000000000000000012 /* Views */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		A1000000000000000000000F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000026 /* Analysis.swift */, A10000000000000000000028 /* Language.swift */, A1000000000000000000002A /* LexiconArticle.swift */, A100000000000000000000E1 /* HeadwordHit.swift */, B20000000000000000000002 /* NavigationHistory.swift */, B20000000000000000000004 /* CrossReferenceLink.swift */, B20000000000000000000006 /* LatinQuantity.swift */, A100000000000000000000C1 /* LexiconColorScheme.swift */, A100000000000000000000C5 /* ContentTextSize.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000010 /* Parsing */ = {
+			isa = PBXGroup;
+			children = (
+				A1000000000000000000002C /* Parser.swift */,
+				A10000000000000000000051 /* MorpheusParser.swift */,
+				A10000000000000000000053 /* MorpheusOutputParser.swift */,
+				A10000000000000000000055 /* ParserPipeline.swift */,
+				A10000000000000000000057 /* MorphPreprocess.swift */,
+				A10000000000000000000059 /* BetaCode.swift */,
+				A1000000000000000000005B /* ParserPreferences.swift */,
+				A10000000000000000000083 /* WordsParser.swift */,
+				A10000000000000000000085 /* WordsOutputParser.swift */,
+			);
+			name = Parsing;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000011 /* Lexicon */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000030 /* LexiconStore.swift */,
+				A10000000000000000000071 /* ZstdCodec.swift */,
+				A10000000000000000000073 /* SQLiteLexiconDB.swift */,
+				A100000000000000000000A1 /* GenderRefiner.swift */,
+			);
+			name = Lexicon;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000012 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000034 /* SearchBar.swift */, A10000000000000000000036 /* AnalysisListView.swift */, A100000000000000000000D1 /* AnalysesKeyboardHost.swift */, A100000000000000000000E3 /* HeadwordListView.swift */, A10000000000000000000038 /* ArticleView.swift */, A1000000000000000000003A /* AboutView.swift */, A100000000000000000000C3 /* SnappingVSplitView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000013 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000077 /* Lexicon */,
+				A10000000000000000000091 /* Morpheus */,
+				A100000000000000000000A3 /* WORDS */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000077 /* Lexicon */ = {
+			isa = PBXGroup;
+			children = (
+				A100000000000000000000B1 /* lat.sqlite */,
+				A100000000000000000000F9 /* grc.sqlite */,
+			);
+			name = Lexicon;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000015 /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000042 /* Assets.xcassets */,
+				A10000000000000000000044 /* Info.plist */,
+			);
+			name = Supporting;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A10000000000000000000002 /* VerbaMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10000000000000000000007 /* Build configuration list for PBXNativeTarget "VerbaMac" */;
+			buildPhases = (
+				A10000000000000000000003 /* Sources */,
+				A10000000000000000000005 /* Frameworks */,
+				A10000000000000000000004 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VerbaMac;
+			productName = VerbaMac;
+			productReference = A10000000000000000000016 /* VerbaMac.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A10000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A10000000000000000000002 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A10000000000000000000006 /* Build configuration list for PBXProject "VerbaMac" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A1000000000000000000000C;
+			productRefGroup = A1000000000000000000000D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A10000000000000000000002 /* VerbaMac */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A10000000000000000000004 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000043 /* Assets.xcassets in Resources */,
+				A10000000000000000000090 /* Morpheus in Resources */,
+				A100000000000000000000B0 /* lat.sqlite in Resources */,
+				A100000000000000000000F8 /* grc.sqlite in Resources */,
+				A100000000000000000000A2 /* WORDS in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A10000000000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000021 /* VerbaMacApp.swift in Sources */,
+				A10000000000000000000023 /* ContentView.swift in Sources */,
+				A10000000000000000000025 /* AppState.swift in Sources */,
+				A10000000000000000000027 /* Analysis.swift in Sources */,
+				A10000000000000000000029 /* Language.swift in Sources */,
+				A1000000000000000000002B /* LexiconArticle.swift in Sources */,
+				A100000000000000000000E0 /* HeadwordHit.swift in Sources */,
+				B20000000000000000000001 /* NavigationHistory.swift in Sources */,
+				B20000000000000000000003 /* CrossReferenceLink.swift in Sources */,
+				B20000000000000000000005 /* LatinQuantity.swift in Sources */,
+				A1000000000000000000002D /* Parser.swift in Sources */,
+				A10000000000000000000031 /* LexiconStore.swift in Sources */,
+				A100000000000000000000A0 /* GenderRefiner.swift in Sources */,
+				A10000000000000000000070 /* ZstdCodec.swift in Sources */,
+				A10000000000000000000072 /* SQLiteLexiconDB.swift in Sources */,
+				A10000000000000000000035 /* SearchBar.swift in Sources */,
+				A10000000000000000000037 /* AnalysisListView.swift in Sources */,
+				A100000000000000000000D0 /* AnalysesKeyboardHost.swift in Sources */,
+				A100000000000000000000E2 /* HeadwordListView.swift in Sources */,
+				A10000000000000000000039 /* ArticleView.swift in Sources */,
+				A100000000000000000000C0 /* LexiconColorScheme.swift in Sources */,
+				A100000000000000000000C4 /* ContentTextSize.swift in Sources */,
+				A100000000000000000000C2 /* SnappingVSplitView.swift in Sources */,
+				A1000000000000000000003B /* AboutView.swift in Sources */,
+				A10000000000000000000050 /* MorpheusParser.swift in Sources */,
+				A10000000000000000000052 /* MorpheusOutputParser.swift in Sources */,
+				A10000000000000000000054 /* ParserPipeline.swift in Sources */,
+				A10000000000000000000056 /* MorphPreprocess.swift in Sources */,
+				A10000000000000000000058 /* BetaCode.swift in Sources */,
+				A1000000000000000000005A /* ParserPreferences.swift in Sources */,
+				A10000000000000000000080 /* ServiceLookup.swift in Sources */,
+				A10000000000000000000082 /* WordsParser.swift in Sources */,
+				A10000000000000000000084 /* WordsOutputParser.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A10000000000000000000008 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				OTHER_LDFLAGS = ("-lcompression",);
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A10000000000000000000009 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				OTHER_LDFLAGS = ("-lcompression",);
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		A1000000000000000000000A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Supporting/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Brian T. Austin. Licensed under the GNU GPL v3.0.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				OTHER_LDFLAGS = ("-lcompression",);
+				MARKETING_VERSION = 0.1.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.verbamac.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				ARCHS = arm64;
+				EXCLUDED_ARCHS = x86_64;
+			};
+			name = Debug;
+		};
+		A1000000000000000000000B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Supporting/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Brian T. Austin. Licensed under the GNU GPL v3.0.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				OTHER_LDFLAGS = ("-lcompression",);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.verbamac.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				ARCHS = arm64;
+				EXCLUDED_ARCHS = x86_64;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A10000000000000000000006 /* Build configuration list for PBXProject "VerbaMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000008 /* Debug */,
+				A10000000000000000000009 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10000000000000000000007 /* Build configuration list for PBXNativeTarget "VerbaMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1000000000000000000000A /* Debug */,
+				A1000000000000000000000B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A10000000000000000000001 /* Project object */;
+}
