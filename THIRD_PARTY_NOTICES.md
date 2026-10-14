@@ -33,3 +33,8 @@ components, each under its own license. Full license texts are in `ThirdParty/`.
 - By Colonel William A. Whitaker (USAF, Retired), 1936–2010.
 - License notice: "Permission is hereby freely given for any and all use of
   program and data." — `ThirdParty/WORDS-LICENCE.txt`
+
+## Acknowledgement: Verba
+
+- Inspired by Verba, a Lewis & Short browser for Mac by Joshua Hayes (v1.1, 2010; no longer maintained).
+- This is an acknowledgement only; no Verba code or data is included.

@@ -42,6 +42,10 @@ struct AboutView: View {
                     "Whitaker’s WORDS",
                     "By William A. Whitaker (1936–2010). Freely given for any and all use. github.com/mk270/whitakers-words"
                 )
+                credit(
+                    "Verba",
+                    "Inspired by Verba, a Lewis & Short browser for Mac by Joshua Hayes (v1.1, 2010; no longer maintained)."
+                )
             }
 
             HStack {

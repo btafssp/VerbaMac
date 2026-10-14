@@ -67,6 +67,7 @@ You need Xcode 15 or later on an Apple Silicon Mac.
   ([perseids-tools/morpheus](https://github.com/perseids-tools/morpheus)).
 - Whitaker's WORDS: free-use notice by William A. Whitaker
   ([mk270/whitakers-words](https://github.com/mk270/whitakers-words)).
+- Inspired by Verba, a Lewis & Short browser for Mac by Joshua Hayes (v1.1, 2010; no longer maintained).
 
 Built with the help of Grok Bot 0.70.2.
 
