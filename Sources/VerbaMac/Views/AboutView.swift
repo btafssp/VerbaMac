@@ -43,6 +43,10 @@ struct AboutView: View {
                     "By William A. Whitaker (1936–2010). Freely given for any and all use. github.com/mk270/whitakers-words"
                 )
                 credit(
+                    "Zstandard (zstd)",
+                    "Decompression library by Meta Platforms, Inc. and affiliates. BSD License. github.com/facebook/zstd"
+                )
+                credit(
                     "Verba",
                     "Inspired by Verba, a Lewis & Short browser for Mac by Joshua Hayes (v1.1, 2010; no longer maintained)."
                 )

@@ -34,6 +34,14 @@ components, each under its own license. Full license texts are in `ThirdParty/`.
 - License notice: "Permission is hereby freely given for any and all use of
   program and data." — `ThirdParty/WORDS-LICENCE.txt`
 
+## Zstandard (zstd) 1.5.7
+
+- Source: https://github.com/facebook/zstd
+- Copyright (c) Meta Platforms, Inc. and affiliates.
+- License: BSD 3-Clause — `ThirdParty/zstd/LICENSE`
+- The bundled `libzstd.dylib` (arm64, macOS 14+) is built from the unmodified
+  v1.5.7 release source and is used to decompress the dictionary articles.
+
 ## Acknowledgement: Verba
 
 - Inspired by Verba, a Lewis & Short browser for Mac by Joshua Hayes (v1.1, 2010; no longer maintained).

@@ -5,8 +5,8 @@ import Darwin
 ///
 /// Apple removed `COMPRESSION_ZSTD` from the public Compression.framework API
 /// (macOS 27 / Xcode 27 SDK). Runtime decompress uses **libzstd** via `dlopen`
-/// (Homebrew `/opt/homebrew/lib/libzstd.dylib`, `/usr/local`, or a dylib next to
-/// the app). Dictionary frames work when `dictionary` is the trained `zdicts` blob.
+/// (the copy bundled in `Contents/Frameworks` first, then Homebrew/`/usr/local`
+/// for development builds). Dictionary frames work when `dictionary` is the trained `zdicts` blob.
 enum ZstdCodec: Sendable {
     static func decompress(_ data: Data, dictionary: Data?) -> Data? {
         if data.isEmpty { return nil }
@@ -32,12 +32,14 @@ private final class LibZstd: @unchecked Sendable {
     private let zstdIsError: @convention(c) (Int) -> UInt32
 
     private init() {
+        // Bundled copy first (signed with the app's Team ID, so hardened-runtime
+        // library validation accepts it); system copies only for dev builds.
         let candidates = [
-            "/opt/homebrew/lib/libzstd.dylib",
-            "/usr/local/lib/libzstd.dylib",
             Bundle.main.privateFrameworksPath.map { $0 + "/libzstd.dylib" },
             Bundle.main.bundlePath + "/Contents/Frameworks/libzstd.dylib",
             Bundle.main.bundlePath + "/Contents/MacOS/libzstd.dylib",
+            "/opt/homebrew/lib/libzstd.dylib",
+            "/usr/local/lib/libzstd.dylib",
         ].compactMap { $0 }
 
         var loaded: UnsafeMutableRawPointer?
