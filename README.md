@@ -33,8 +33,6 @@ Update later with `brew upgrade --cask verbamac`. The tap lives at [btafssp/home
      **Open Anyway** next to the VerbaMac message. Confirm with your password.
    - From then on VerbaMac opens normally.
 
-A Homebrew tap is planned.
-
 ## Building from source
 
 You need Xcode 15 or later on an Apple Silicon Mac.
