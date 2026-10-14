@@ -69,6 +69,10 @@ You need Xcode 15 or later on an Apple Silicon Mac.
 
 3. Open `VerbaMac.xcodeproj` in Xcode and run the **VerbaMac** scheme.
 
+## What's the Python for?
+
+VerbaMac itself is 100% native Swift/SwiftUI. The Python in this repository is build-time tooling only: `Tools/importer` turns the Perseus Lewis & Short and LSJ TEI files into the SQLite databases, and `Tools/morpheus/check_sample_nl.py` is a small sanity check for Morpheus output. The C code is the vendored Morpheus morphological parser, which is compiled into the `cruncher` tool the app calls. None of the Python ships in the app.
+
 ## Licenses
 
 - VerbaMac's source code: © 2026 Brian T. Austin, **GNU GPL v3.0** — see [`LICENSE`](LICENSE).
