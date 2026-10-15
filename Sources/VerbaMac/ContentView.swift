@@ -176,6 +176,10 @@ struct ContentView: View {
                     Label("About VerbaMac", systemImage: "info.circle")
                 }
             }
+            ToolbarItem(placement: .primaryAction) {
+                LexiconShareButton(article: state.currentArticle)
+                    .help("Share")
+            }
         }
     }
 

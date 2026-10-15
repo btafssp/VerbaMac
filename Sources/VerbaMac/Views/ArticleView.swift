@@ -277,6 +277,7 @@ struct ArticleWebView: NSViewRepresentable {
         webView.navigationDelegate = context.coordinator
         webView.onShiftTab = onShiftTab
         context.coordinator.webView = webView
+        LexiconWebViewHandle.shared.webView = webView
         return webView
     }
 
