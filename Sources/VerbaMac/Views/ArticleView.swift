@@ -272,6 +272,9 @@ struct ArticleWebView: NSViewRepresentable {
     func makeNSView(context: Context) -> LexiconWKWebView {
         let config = WKWebViewConfiguration()
         config.suppressesIncrementalRendering = true
+        config.userContentController.add(context.coordinator, name: LexiconWebViewHandle.selectionMessage)
+        config.userContentController.addUserScript(WKUserScript(
+            source: LexiconWebViewHandle.selectionScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true))
         let webView = LexiconWKWebView(frame: .zero, configuration: config)
         webView.setValue(false, forKey: "drawsBackground")
         webView.navigationDelegate = context.coordinator
@@ -292,6 +295,7 @@ struct ArticleWebView: NSViewRepresentable {
             context.coordinator.lastHTML = html
             context.coordinator.pendingSection = scrollSection
             context.coordinator.lastSection = scrollSection
+            LexiconWebViewHandle.shared.clearSelection()
             webView.loadHTMLString(html, baseURL: nil)
         } else if context.coordinator.lastSection != scrollSection {
             context.coordinator.lastSection = scrollSection
@@ -317,7 +321,22 @@ struct ArticleWebView: NSViewRepresentable {
 
     func makeCoordinator() -> Coordinator { Coordinator() }
 
-    final class Coordinator: NSObject, WKNavigationDelegate {
+    static func dismantleNSView(_ webView: LexiconWKWebView, coordinator: Coordinator) {
+        webView.configuration.userContentController.removeScriptMessageHandler(forName: LexiconWebViewHandle.selectionMessage)
+        if LexiconWebViewHandle.shared.webView === webView {
+            LexiconWebViewHandle.shared.webView = nil
+            LexiconWebViewHandle.shared.clearArticle()
+        }
+    }
+
+    final class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
+        func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+            guard message.name == LexiconWebViewHandle.selectionMessage,
+                  let body = message.body as? [String: Any] else { return }
+            LexiconWebViewHandle.shared.selectionHTML = body["html"] as? String ?? ""
+            LexiconWebViewHandle.shared.selectionText = body["text"] as? String ?? ""
+        }
+
         var lastHTML: String?
         var isFirstResponder = false
         var lastHandledFindID: UUID?
