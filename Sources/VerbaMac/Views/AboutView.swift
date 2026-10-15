@@ -15,6 +15,12 @@ struct AboutView: View {
                     Text("Latin & Greek morphology and lexica")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
+                    Text(Self.versionString)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Link("github.com/btafssp/VerbaMac",
+                         destination: URL(string: "https://github.com/btafssp/VerbaMac")!)
+                        .font(.caption)
                 }
             }
 
@@ -27,7 +33,7 @@ struct AboutView: View {
                     "VerbaMac",
                     "© 2026 Brian T. Austin. Licensed under the GNU General Public License v3.0."
                 )
-                Text("Built with the help of Grok Bot 0.70.2")
+                Text("Built with the help of Grok Bot")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 credit(
@@ -60,6 +66,14 @@ struct AboutView: View {
         }
         .padding(24)
         .frame(width: 520)
+    }
+
+    /// "Version 1.0.3 (4)", read from the bundle.
+    static var versionString: String {
+        let info = Bundle.main.infoDictionary
+        let short = info?["CFBundleShortVersionString"] as? String ?? "?"
+        let build = info?["CFBundleVersion"] as? String ?? "?"
+        return "Version \(short) (\(build))"
     }
 
     private func credit(_ title: String, _ detail: String) -> some View {
