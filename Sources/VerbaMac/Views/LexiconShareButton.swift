@@ -65,12 +65,12 @@ enum LexiconSharePayload {
             .replacingOccurrences(of: ">", with: "&gt;")
     }
 
-    /// One attributed string: bold lemma, body, blank line, italic credit.
+    /// One attributed string: body (which already starts with the lemma), blank line, italic credit.
     /// Share services read RTF, HTML, and plain text from it.
     static func attributed(lemma: String, bodyHTML: String, language: LexiconLanguage) -> NSAttributedString? {
         let doc = """
         <!DOCTYPE html><html><head><meta charset="utf-8"></head><body>\
-        <p><b>\(escape(lemma))</b></p>\(bodyHTML)<p><br></p><p><i>— \(escape(credit(for: language)))</i></p></body></html>
+        \(bodyHTML)<p><br></p><p><i>— \(escape(credit(for: language)))</i></p></body></html>
         """
         guard let data = doc.data(using: .utf8),
               let attr = try? NSAttributedString(
