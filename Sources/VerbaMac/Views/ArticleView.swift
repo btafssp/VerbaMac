@@ -562,6 +562,7 @@ enum WelcomeContent {
     <tr><td><kbd>⌘E</kbd> <kbd>⌘J</kbd></td><td>Use the selection for Find; jump to the selection</td></tr>
     <tr><td><kbd>⌘=</kbd> <kbd>⌘−</kbd></td><td>Larger and smaller text (View › Actual Size resets)</td></tr>
     </table>
+    <p class="tip">Where Apple’s Dictionary app has a matching command, the keyboard shortcut here is the same.</p>
     <h2>Sharing and Services</h2>
     <p>The Share button sends the text you have selected, or the whole entry if nothing is selected, with a credit to the dictionary. In other apps, select a word and choose <b>Services › Look Up in VerbaMac</b>.</p>
     <p class="tip">This page appears whenever no entry is open. Just start typing.</p>
