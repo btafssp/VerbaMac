@@ -8,6 +8,9 @@ final class AppState: ObservableObject {
     @Published var query: String = "" {
         didSet {
             guard !suppressHeadwordRefresh else { return }
+            if query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, !oldValue.isEmpty {
+                analyses = []; selectedAnalysisID = nil; currentArticle = nil; statusMessage = nil
+            }
             scheduleHeadwordRefresh()
         }
     }

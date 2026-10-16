@@ -39,6 +39,11 @@ struct ArticleView: View {
                         scrollSection: state.articleSection,
                         onCrossReference: { state.openCrossReference($0) }
                     )
+                } else if statusMessage == nil {
+                    ArticleWebView(
+                        html: Self.wrappedHTML(WelcomeContent.html, scheme: colorScheme, bodyPoints: contentTextSize),
+                        onShiftTab: onShiftTab
+                    )
                 } else {
                     emptyLexicon
                 }
@@ -507,4 +512,59 @@ final class FocusingSearchField: NSSearchField {
         DispatchQueue.main.async(execute: apply)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.08, execute: apply)
     }
+}
+
+/// Welcome page shown in the lexicon pane when nothing is loaded.
+enum WelcomeContent {
+    static let html = """
+    <style>
+    .welcome { padding: 18px 24px 28px; max-width: 44rem; }
+    .welcome h1 { display: block; font-size: 1.6rem; margin: 0 0 .1em; }
+    .welcome .sub { color: var(--muted, GrayText); font-style: italic; margin: 0 0 1em; }
+    .welcome h2 { font-size: 1.05rem; margin: 1.3em 0 .35em; padding-bottom: .15em;
+      border-bottom: 1px solid color-mix(in srgb, currentColor 22%, transparent); }
+    .welcome p { margin: .3em 0; }
+    .welcome table { border-collapse: collapse; }
+    .welcome td { padding: .16em .9em .16em 0; vertical-align: top; }
+    .welcome td:first-child { white-space: nowrap; }
+    .welcome kbd { font: 0.82em -apple-system, "Helvetica Neue", sans-serif; padding: 1px 6px; border-radius: 4px;
+      border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+      background: color-mix(in srgb, currentColor 8%, transparent); }
+    .welcome .ex { font-family: "Times New Roman", "Gentium Plus", serif; font-style: italic; }
+    .welcome .tip { color: var(--muted, GrayText); margin-top: 1.4em; }
+    </style>
+    <div class="welcome">
+    <h1>Welcome to VerbaMac</h1>
+    <p class="sub">Latin and Greek morphology with Lewis &amp; Short and LSJ, side by side.</p>
+    <h2>Looking up a form</h2>
+    <p>Type any inflected Latin or Greek form in the search box, such as <span class="ex">custodes</span> or <span class="ex">λύομεν</span>, and press <kbd>Return</kbd>. The analyses pane lists every possible parse (from Morpheus, with WORDS as a fallback for Latin), and the lexicon pane opens the matching entry in Lewis &amp; Short or LSJ. Enclitics such as <span class="ex">-que</span> are split off for you.</p>
+    <h2>Latin, Greek, or both</h2>
+    <table>
+    <tr><td><kbd>⌘1</kbd></td><td>Latin only</td></tr>
+    <tr><td><kbd>⌘2</kbd></td><td>Greek only</td></tr>
+    <tr><td><kbd>⌘0</kbd></td><td>Both (VerbaMac guesses the language)</td></tr>
+    <tr><td><kbd>⌘}</kbd> <kbd>⌘{</kbd></td><td>Next and previous language</td></tr>
+    </table>
+    <p>Greek can be typed in Unicode (<span class="ex">λόγος</span>) or in Beta Code (<span class="ex">lo/gos</span>). With the <b>−n</b> box ticked, accents are ignored, so unaccented or loosely accented forms still parse. In Both mode, plain ASCII is tried as Latin first, then as Beta Code Greek.</p>
+    <h2>Moving around</h2>
+    <table>
+    <tr><td><kbd>Tab</kbd></td><td>From the search box to the headword list</td></tr>
+    <tr><td><kbd>↑</kbd> <kbd>↓</kbd> <kbd>Return</kbd></td><td>Choose a headword, or an analysis, and open its lexicon entry</td></tr>
+    <tr><td><kbd>⇧Tab</kbd></td><td>Step back: lexicon → analyses → search box (with the text selected)</td></tr>
+    <tr><td><kbd>⌥⌘F</kbd></td><td>Search for a new word</td></tr>
+    <tr><td><kbd>⌘[</kbd> <kbd>⌘]</kbd></td><td>Back and forward through your lookups (also the arrows beside the search box)</td></tr>
+    </table>
+    <p>The headword list on the left follows what you type, showing dictionary headwords that begin with those letters. Cross-references in LSJ are links: click one to jump to that entry.</p>
+    <h2>Reading an entry</h2>
+    <table>
+    <tr><td><kbd>⌘F</kbd></td><td>Find in the entry</td></tr>
+    <tr><td><kbd>⌘G</kbd> <kbd>⇧⌘G</kbd></td><td>Next and previous match</td></tr>
+    <tr><td><kbd>⌘E</kbd> <kbd>⌘J</kbd></td><td>Use the selection for Find; jump to the selection</td></tr>
+    <tr><td><kbd>⌘=</kbd> <kbd>⌘−</kbd></td><td>Larger and smaller text (View › Actual Size resets)</td></tr>
+    </table>
+    <h2>Sharing and Services</h2>
+    <p>The Share button sends the text you have selected, or the whole entry if nothing is selected, with a credit to the dictionary. In other apps, select a word and choose <b>Services › Look Up in VerbaMac</b>.</p>
+    <p class="tip">This page appears whenever no entry is open. Just start typing.</p>
+    </div>
+    """
 }
