@@ -12,12 +12,12 @@ Requirements: Apple Silicon Mac, macOS 14 Sonoma or later.
 ### With Homebrew (recommended)
 
 ```sh
-brew tap btafssp/verbamac
-brew trust btafssp/verbamac   # newer Homebrew versions require trusting third-party taps
-brew install --cask verbamac
+brew tap btafssp/tap
+brew trust btafssp/tap   # newer Homebrew versions require trusting third-party taps
+brew install --cask btafssp/tap/verbamac
 ```
 
-Update later with `brew upgrade --cask verbamac`. The tap lives at [btafssp/homebrew-verbamac](https://github.com/btafssp/homebrew-verbamac). Because VerbaMac is not notarized, approve it once on first launch (System Settings › Privacy & Security › Open Anyway), or run `xattr -dr com.apple.quarantine /Applications/VerbaMac.app`.
+Update later with `brew upgrade --cask verbamac`. The tap lives at [btafssp/homebrew-tap](https://github.com/btafssp/homebrew-tap). Because VerbaMac is not notarized, approve it once on first launch (System Settings › Privacy & Security › Open Anyway), or run `xattr -dr com.apple.quarantine /Applications/VerbaMac.app`.
 
 ### Manual download
 
