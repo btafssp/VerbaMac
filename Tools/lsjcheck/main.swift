@@ -249,6 +249,37 @@ Task {
   }
   check(BetaCode.fromGreek("Ἀντίοχος") == "*)anti/oxos", "fromGreek capital order: \(BetaCode.fromGreek("Ἀντίοχος"))")
   check(BetaCode.toDisplay("*)anti/oxos") == "Ἀντίοχος" && BetaCode.toDisplay("*a)nti/oxos") == "Ἀντίοχος", "toDisplay capital both orders")
+  // WORDS fallback: genuine dictionary entries Morpheus lacks (not suffix guesses).
+  do {
+    let wpipe = ParserPipeline(preferences: ParserPreferences())
+    let mem = await wpipe.parse("memorial", language: .latin)
+    check(mem.contains { $0.lemma.lowercased() == "memorial" }, "words memorial lemma: \(mem.map(\.lemma))")
+    check(mem.contains { ($0.gloss ?? "").contains("records/memoranda") || ($0.gloss ?? "").contains("Souter") },
+          "words memorial gloss: \(mem.map { $0.gloss ?? "-" })")
+    if let hit = mem.first(where: { $0.lemma.lowercased() == "memorial" }) {
+      let ls = await lat.article(language: .latin, lemmaNorm: hit.lemmaNorm)
+      check(ls == nil, "words memorial has no L&S article")
+      let art = await lat.article(for: hit)
+      check((art?.html.contains("records/memoranda") == true) || (art?.plain?.contains("records/memoranda") == true),
+            "words memorial article falls back to gloss")
+      check(art?.html.contains("Whitaker") == true, "words memorial article credits WORDS")
+    } else {
+      check(false, "words memorial missing hit for article fallback")
+    }
+    for (w, needle) in [("ballaena", "whale"), ("acedia", "weariness")] {
+      let res = await wpipe.parse(w, language: .latin)
+      check(res.contains { $0.lemma.lowercased() == w && ($0.gloss ?? "").localizedCaseInsensitiveContains(needle) },
+            "words \(w) → \(needle): \(res.map { "\($0.lemma)|\($0.gloss ?? "-")" })")
+    }
+    let moll = await wpipe.parse("mollites", language: .latin)
+    check(moll.isEmpty, "words mollites no suffix-guess: \(moll.map(\.lemma))")
+    let amo = await wpipe.parse("amo", language: .latin)
+    check(amo.contains { $0.lemma.lowercased().hasPrefix("amo") }, "regression amo: \(amo.map(\.lemma))")
+    let cu = await wpipe.parse("custos", language: .latin)
+    check(cu.contains { $0.lemma.lowercased() == "custos" }, "regression custos: \(cu.map(\.lemma))")
+    let qe = await wpipe.parse("custodesque", language: .latin)
+    check(qe.contains { $0.lemma.lowercased() == "custos" }, "regression -que custodesque → custos: \(qe.map(\.lemma))")
+  }
   print(fails == 0 ? "ALL PASS" : "\(fails) FAIL"); exit(fails == 0 ? 0 : 1)
 }
 RunLoop.main.run()
