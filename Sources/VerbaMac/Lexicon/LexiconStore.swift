@@ -143,7 +143,35 @@ actor LexiconStore {
                 return Self.present(decode(row, language: analysis.language))
             }
         }
-        return article(language: analysis.language, lemmaNorm: analysis.lemmaNorm)
+        if let found = article(language: analysis.language, lemmaNorm: analysis.lemmaNorm) {
+            return found
+        }
+        // Late Latin / Souter lemmas may exist only in WORDS. Show that gloss
+        // rather than an empty lexicon pane.
+        return Self.articleFromWordsGloss(analysis)
+    }
+
+    private static func articleFromWordsGloss(_ analysis: Analysis) -> LexiconArticle? {
+        guard let gloss = analysis.gloss?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !gloss.isEmpty else { return nil }
+        var body = "<p class=\"tr\">\(escapeHTML(gloss))</p>"
+        if let citation = analysis.quantity?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !citation.isEmpty {
+            body = "<p class=\"cit\">\(escapeHTML(citation))</p>" + body
+        }
+        let html = """
+        <article class="entry"><h1>\(escapeHTML(analysis.lemma))</h1>\
+        \(body)\
+        <p class="note"><i>Whitaker’s WORDS</i></p>\
+        </article>
+        """
+        return LexiconArticle(
+            lemma: analysis.lemma,
+            lemmaNorm: analysis.lemmaNorm,
+            language: analysis.language,
+            html: html,
+            plain: gloss
+        )
     }
 
     func backendDescription() -> String {

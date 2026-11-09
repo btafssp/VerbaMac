@@ -24,23 +24,29 @@ enum WordsOutputParser: Sendable {
         var results: [Analysis] = []
         var i = 0
         while i < lines.count {
-            let line = lines[i]
-            // Morphology / form line: contains case or tense codes, or starts with stem.ending
-            if let morphHit = parseMorphLine(line) {
+            if parseMorphLine(lines[i]) != nil {
+                // Neuter lemmas (memorial) print several morph lines, then one dict+gloss
+                // block. Attach that shared block to every preceding morph line.
+                var morphHits: [MorphHit] = []
+                var j = i
+                while j < lines.count, let hit = parseMorphLine(lines[j]) {
+                    morphHits.append(hit)
+                    j += 1
+                }
+
                 var lemma = MorphPreprocess.latinLookupKey(surfaceForm)
                 var lemmaDisplay = surfaceForm
-                var pos = morphHit.pos
+                var dictPOS: String?
                 var citation: String?
                 var glossParts: [String] = []
 
-                var j = i + 1
                 while j < lines.count {
                     let next = lines[j]
                     if looksLikeMorphLine(next) { break }
                     if let dict = parseDictLine(next) {
                         lemmaDisplay = dict.lemma
                         lemma = MorphPreprocess.latinLookupKey(dict.lemmaNorm)
-                        pos = dict.pos.isEmpty ? pos : dict.pos
+                        if !dict.pos.isEmpty { dictPOS = dict.pos }
                         citation = dict.citation
                     } else if looksLikeGloss(next) {
                         glossParts.append(next.trimmingCharacters(in: CharacterSet(charactersIn: "|")))
@@ -51,21 +57,61 @@ enum WordsOutputParser: Sendable {
                 }
 
                 let gloss = glossParts.isEmpty ? nil : glossParts.joined(separator: " ")
-                results.append(
-                    Analysis(
-                        lemma: lemmaDisplay,
-                        lemmaNorm: lemma,
-                        language: .latin,
-                        pos: pos,
-                        morphology: morphHit.morphology,
-                        quantity: citation,
-                        gloss: gloss
+                for morphHit in morphHits {
+                    let pos = (dictPOS?.isEmpty == false) ? dictPOS! : morphHit.pos
+                    results.append(
+                        Analysis(
+                            lemma: lemmaDisplay,
+                            lemmaNorm: lemma,
+                            language: .latin,
+                            pos: pos,
+                            morphology: morphHit.morphology,
+                            quantity: citation,
+                            gloss: gloss
+                        )
                     )
-                )
+                }
                 i = j
                 continue
             }
             i += 1
+        }
+
+        // Dictionary-only output (no morph line): still a real WORDS entry.
+        if results.isEmpty {
+            var j = 0
+            while j < lines.count {
+                let line = lines[j]
+                if !looksLikeMorphLine(line), let dict = parseDictLine(line) {
+                    var glossParts: [String] = []
+                    var k = j + 1
+                    while k < lines.count {
+                        let next = lines[k]
+                        if looksLikeMorphLine(next) || parseDictLine(next) != nil { break }
+                        if looksLikeGloss(next) {
+                            glossParts.append(next.trimmingCharacters(in: CharacterSet(charactersIn: "|")))
+                        } else if next.hasPrefix("=>") || next.hasPrefix("*") {
+                            break
+                        }
+                        k += 1
+                    }
+                    let gloss = glossParts.isEmpty ? nil : glossParts.joined(separator: " ")
+                    results.append(
+                        Analysis(
+                            lemma: dict.lemma,
+                            lemmaNorm: MorphPreprocess.latinLookupKey(dict.lemmaNorm),
+                            language: .latin,
+                            pos: dict.pos.isEmpty ? "unknown" : dict.pos,
+                            morphology: "",
+                            quantity: dict.citation,
+                            gloss: gloss
+                        )
+                    )
+                    j = k
+                    continue
+                }
+                j += 1
+            }
         }
 
         // Deduplicate identical lemma+pos+morphology
