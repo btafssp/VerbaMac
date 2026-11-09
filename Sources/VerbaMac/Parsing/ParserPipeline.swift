@@ -1,7 +1,8 @@
 import Foundation
 
-/// Tries Morpheus first; on empty / unavailable Latin results, tries Whitaker’s
-/// WORDS; otherwise returns no analyses.
+/// Tries Morpheus first. For Latin, also runs Whitaker’s WORDS and adds any
+/// lemmas Morpheus did not produce. If Morpheus is empty or unavailable, WORDS
+/// is the sole Latin fallback.
 ///
 /// `lastDebugNote` explains which path ran (for status / About debugging).
 final class ParserPipeline: Parser, @unchecked Sendable {
@@ -33,13 +34,9 @@ final class ParserPipeline: Parser, @unchecked Sendable {
         }
 
         // --- Morpheus (primary) ---
+        var morpheusHits: [Analysis] = []
         if morpheus.isAvailable {
-            let results = await morpheus.parse(trimmed, language: language)
-            if !results.isEmpty {
-                setNote("Morpheus")
-                return results
-            }
-            // Empty Morpheus → continue to WORDS.
+            morpheusHits = await morpheus.parse(trimmed, language: language)
         }
 
         // --- WORDS (Latin only) ---
@@ -53,15 +50,32 @@ final class ParserPipeline: Parser, @unchecked Sendable {
 
         if wantsLatin {
             let wordsHits = await words.parse(trimmed, language: .latin)
-            if !wordsHits.isEmpty {
-                let via = "WORDS"
-                if morpheus.isAvailable {
-                    setNote("\(via) (Morpheus returned no analyses)")
-                } else {
-                    setNote("\(via) — \(morpheus.availabilityNote)")
+            if morpheusHits.isEmpty {
+                if !wordsHits.isEmpty {
+                    if morpheus.isAvailable {
+                        setNote("WORDS (Morpheus returned no analyses)")
+                    } else {
+                        setNote("WORDS — \(morpheus.availabilityNote)")
+                    }
+                    return wordsHits
                 }
-                return wordsHits
+            } else {
+                // Keep Morpheus analyses; add WORDS lemmas it did not produce
+                // (memorialia → memorialis from Morpheus + memorial from WORDS).
+                let have = Set(morpheusHits.map { MorphPreprocess.latinLookupKey($0.lemmaNorm) })
+                let extras = wordsHits.filter { !have.contains(MorphPreprocess.latinLookupKey($0.lemmaNorm)) }
+                if extras.isEmpty {
+                    setNote("Morpheus")
+                    return morpheusHits
+                }
+                setNote("Morpheus + WORDS")
+                return morpheusHits + extras
             }
+        }
+
+        if !morpheusHits.isEmpty {
+            setNote("Morpheus")
+            return morpheusHits
         }
 
         if morpheus.isAvailable {

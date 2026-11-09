@@ -118,14 +118,48 @@ actor LexiconStore {
     }
 
     private func rawArticle(language: LexiconLanguage, lemmaNorm: String) -> LexiconArticle? {
-        articleFromSQLite(language: language, lemmaNorm: lemmaNorm)
+        if let hit = articleFromSQLite(language: language, lemmaNorm: lemmaNorm) {
+            return hit
+        }
+        if language == .latin {
+            for alt in Self.latinNestedOrthFallbacks(lemmaNorm) {
+                if let hit = articleFromSQLite(language: .latin, lemmaNorm: alt) {
+                    return hit
+                }
+            }
+        }
+        return nil
+    }
+
+    /// L&S often nests substantival -e / -ia forms of a 3rd-declension
+    /// adjective under the -is headword (memoriale, memorialia → memorialis).
+    private static func latinNestedOrthFallbacks(_ norm: String) -> [String] {
+        let key = lookupNorm(.latin, norm)
+        var alts: [String] = []
+        if key.hasSuffix("ia"), key.count > 3 {
+            alts.append(String(key.dropLast(2)) + "is")
+        }
+        if key.hasSuffix("e"), !key.hasSuffix("ae"), key.count > 2 {
+            alts.append(String(key.dropLast()) + "is")
+        }
+        return alts.filter { $0 != key }
+    }
+
+    private func latinCandidates(in db: SQLiteLexiconDB, lemmaNorm: String) -> [(id: Int64, lemma: String)] {
+        var rows = db.candidates(language: .latin, lemmaNorm: Self.lookupNorm(.latin, lemmaNorm))
+        if !rows.isEmpty { return rows }
+        for alt in Self.latinNestedOrthFallbacks(lemmaNorm) {
+            rows = db.candidates(language: .latin, lemmaNorm: Self.lookupNorm(.latin, alt))
+            if !rows.isEmpty { return rows }
+        }
+        return []
     }
 
     /// Convenience from an analysis selection.
     /// Latin: the L&S headword an analysis resolves to, labelled exactly as in the headword pane.
     func headwordLabel(for analysis: Analysis) -> String? {
         guard analysis.language == .latin, let db = db(for: .latin) else { return nil }
-        let rows = db.candidates(language: .latin, lemmaNorm: Self.lookupNorm(.latin, analysis.lemmaNorm))
+        let rows = latinCandidates(in: db, lemmaNorm: analysis.lemmaNorm)
         guard !rows.isEmpty else { return nil }
         var pick = rows[0]
         if let n = analysis.homograph, n >= 1, n <= rows.count { pick = rows[n - 1] }
@@ -137,8 +171,10 @@ actor LexiconStore {
         // Morpheus `#n` → nth lexicon row with that lemma_norm (id order). Without this every
         // homograph opened the first row (abdico#2 showed ab-dĭco, 1 instead of ab-dīco, 3).
         if let n = analysis.homograph, n >= 1, let db = db(for: analysis.language) {
-            let rows = db.candidates(language: analysis.language,
-                                     lemmaNorm: Self.lookupNorm(analysis.language, analysis.lemmaNorm))
+            let rows = analysis.language == .latin
+                ? latinCandidates(in: db, lemmaNorm: analysis.lemmaNorm)
+                : db.candidates(language: analysis.language,
+                                lemmaNorm: Self.lookupNorm(analysis.language, analysis.lemmaNorm))
             if n <= rows.count, let row = db.row(id: rows[n - 1].id) {
                 return Self.present(decode(row, language: analysis.language))
             }
@@ -266,7 +302,6 @@ actor LexiconStore {
             let html = """
             <article class="entry"><h1>\(Self.escapeHTML(row.lemma))</h1>\
             <pre class="plain">\(escaped)</pre>\
-            <p class="note"><i>zstd dictionary decompress pending (libzstd); showing plaintext.</i></p>\
             </article>
             """
             return LexiconArticle(

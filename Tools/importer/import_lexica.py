@@ -98,6 +98,27 @@ def _ensure_no_doctype(path: Path) -> Path:
     return out
 
 
+# Perseus L&S TEI artifacts (print hyphenation left as a space).
+_SOURCE_TEXT_FIXES = (
+    ("memoran dum", "memorandum"),  # memorialis: "memorandum-book" (Suet. Caes. 56)
+)
+
+
+def apply_source_text_fixes(articles) -> int:
+    n = 0
+    for a in articles:
+        html, plain = a.html, a.plain
+        for old, new in _SOURCE_TEXT_FIXES:
+            if old in html or old in plain:
+                a.html = html.replace(old, new)
+                a.plain = plain.replace(old, new)
+                html, plain = a.html, a.plain
+                n += 1
+    if n:
+        print(f"Applied {n} source-text fix(es)")
+    return n
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--seed", action="store_true", help="Include bundled amo/custos/logos samples")
@@ -158,6 +179,8 @@ def main() -> int:
 
     if args.limit and args.limit > 0:
         articles = articles[: args.limit]
+
+    apply_source_text_fixes(articles)
 
     xs = finalize_xrefs(articles)
     if any(xs.values()):

@@ -43,10 +43,18 @@ private final class LibZstd: @unchecked Sendable {
         ].compactMap { $0 }
 
         var loaded: UnsafeMutableRawPointer?
-        for path in candidates {
-            if let h = dlopen(path, RTLD_NOW | RTLD_LOCAL) {
-                loaded = h
-                break
+        // Prefer already-linked symbols so a bundled/rpath libzstd does not
+        // depend on dlopen surviving the hardened runtime.
+        let rtldDefault = UnsafeMutableRawPointer(bitPattern: -2)
+        if let rtldDefault, dlsym(rtldDefault, "ZSTD_decompress") != nil {
+            loaded = rtldDefault
+        }
+        if loaded == nil {
+            for path in candidates {
+                if let h = dlopen(path, RTLD_NOW | RTLD_LOCAL) {
+                    loaded = h
+                    break
+                }
             }
         }
         if loaded == nil {
@@ -125,13 +133,16 @@ private final class LibZstd: @unchecked Sendable {
         let written: Int = data.withUnsafeBytes { srcRaw in
             guard let src = srcRaw.baseAddress else { return -1 }
             if let dictionary, !dictionary.isEmpty {
-                return dictionary.withUnsafeBytes { dictRaw -> Int in
+                let withDict = dictionary.withUnsafeBytes { dictRaw -> Int in
                     guard let dictBase = dictRaw.baseAddress else { return -1 }
                     guard let ddict = zstdCreateDDict(dictBase, dictionary.count) else { return -1 }
                     defer { zstdFreeDDict(ddict) }
                     guard let dctx = zstdCreateDCtx() else { return -1 }
                     defer { zstdFreeDCtx(dctx) }
                     return zstdDecompressUsingDDict(dctx, dst, dstCap, src, data.count, ddict)
+                }
+                if zstdIsError(withDict) == 0 && withDict > 0 {
+                    return withDict
                 }
             }
             return zstdDecompress(dst, dstCap, src, data.count)

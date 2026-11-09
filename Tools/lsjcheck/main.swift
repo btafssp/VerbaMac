@@ -279,6 +279,36 @@ Task {
     check(cu.contains { $0.lemma.lowercased() == "custos" }, "regression custos: \(cu.map(\.lemma))")
     let qe = await wpipe.parse("custodesque", language: .latin)
     check(qe.contains { $0.lemma.lowercased() == "custos" }, "regression -que custodesque → custos: \(qe.map(\.lemma))")
+    check(amo.allSatisfy { $0.gloss == nil }, "amo stays Morpheus-only (no WORDS gloss clutter)")
+    check(cu.allSatisfy { $0.gloss == nil }, "custos stays Morpheus-only (no WORDS gloss clutter)")
+    let mia = await wpipe.parse("memorialia", language: .latin)
+    let miaLemmas = Set(mia.map { $0.lemma.lowercased() })
+    check(miaLemmas.contains("memorial"), "memorialia includes WORDS memorial: \(mia.map(\.lemma))")
+    check(miaLemmas.contains("memorialis"), "memorialia includes memorialis: \(mia.map(\.lemma))")
+    for lemma in ["memoriale", "memorialia"] {
+      if let hit = mia.first(where: { $0.lemma.lowercased() == lemma }) {
+        let label = await lat.headwordLabel(for: hit)
+        let art = await lat.article(for: hit)
+        check(label.map { MorphPreprocess.latinLookupKey($0) } == "memorialis",
+              "memorialia \(lemma) headword → memorialis: \(label ?? "nil")")
+        check(art?.lemmaNorm == "memorialis" || art?.html.localizedCaseInsensitiveContains("memorialis") == true,
+              "memorialia \(lemma) loads memorialis article: \(art?.lemma ?? "nil") \(art?.lemmaNorm ?? "")")
+        check(art?.html.contains("decompress pending") != true, "no zstd pending leak in \(lemma) article")
+      } else {
+        check(false, "memorialia missing Morpheus lemma \(lemma): \(mia.map(\.lemma))")
+      }
+    }
+    if let hit = mia.first(where: { $0.lemma.lowercased() == "memorialis" }) ?? mia.first(where: { $0.lemma.lowercased() == "memoriale" }) {
+      let art = await lat.article(for: hit)
+      check(art?.html.contains("memorandum") == true, "memorialis article has memorandum")
+      check(art?.html.contains("memoran dum") != true, "memorialis article has no memoran dum typo")
+      check(art?.html.contains("decompress pending") != true, "no zstd pending leak in memorialis article")
+    }
+    let nat = Analysis(lemma: "naturale", lemmaNorm: "naturale", language: .latin, pos: "noun", morphology: "neut nom/voc/acc pl")
+    let natArt = await lat.article(for: nat)
+    check(natArt?.lemmaNorm == "naturalis", "naturale nested-orth → naturalis: \(natArt?.lemmaNorm ?? "nil")")
+    let gr = await wpipe.parse("λόγος", language: .greek)
+    check(gr.contains { $0.lemma == "λόγος" }, "regression λόγος: \(gr.map(\.lemma))")
   }
   print(fails == 0 ? "ALL PASS" : "\(fails) FAIL"); exit(fails == 0 ? 0 : 1)
 }
