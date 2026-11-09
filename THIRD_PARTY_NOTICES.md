@@ -39,8 +39,9 @@ components, each under its own license. Full license texts are in `ThirdParty/`.
 - Source: https://github.com/facebook/zstd
 - Copyright (c) Meta Platforms, Inc. and affiliates.
 - License: BSD 3-Clause — `ThirdParty/zstd/LICENSE`
-- The bundled `libzstd.dylib` (arm64, macOS 14+) is built from the unmodified
-  v1.5.7 release source and is used to decompress the dictionary articles.
+- The bundled `libzstd.a` (arm64, macOS 14+) is built from the unmodified
+  v1.5.7 release source and is statically linked so articles decompress without
+  embedding a separate `libzstd.dylib`.
 
 ## Acknowledgement: Verba
 
