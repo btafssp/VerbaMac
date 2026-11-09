@@ -436,6 +436,7 @@ final class AppState: ObservableObject {
             refined.append(r)
         }
 
+        refined = AnalysisMerger.merge(refined)
         refined = ParserPipeline.exactLemmaFirst(refined, query: q)
         analyses = refined
         let debug = pipeline?.lastDebugNote

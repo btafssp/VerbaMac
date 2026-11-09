@@ -159,6 +159,7 @@ extension Notification.Name {
 struct WindowRoot: View {
     @StateObject private var appState = AppState()
     @Environment(\.controlActiveState) private var controlActiveState
+    @State private var didConsumeLaunchQuery = false
 
     var body: some View {
         ContentView()
@@ -167,6 +168,26 @@ struct WindowRoot: View {
                 appState: appState,
                 controlActiveState: controlActiveState
             ))
+            .onAppear {
+                guard !didConsumeLaunchQuery, let q = Self.launchQuery() else { return }
+                didConsumeLaunchQuery = true
+                DispatchQueue.main.async { appState.lookUp(q) }
+            }
+    }
+
+    /// Hidden hook for UI checks (`--query memorialia` or `VERBAMAC_INITIAL_QUERY`).
+    private static func launchQuery() -> String? {
+        if let env = ProcessInfo.processInfo.environment["VERBAMAC_INITIAL_QUERY"] {
+            let trimmed = env.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmed.isEmpty { return trimmed }
+        }
+        let args = CommandLine.arguments
+        if let idx = args.firstIndex(where: { $0 == "--query" || $0 == "-query" }),
+           idx + 1 < args.count {
+            let trimmed = args[idx + 1].trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmed.isEmpty { return trimmed }
+        }
+        return nil
     }
 }
 

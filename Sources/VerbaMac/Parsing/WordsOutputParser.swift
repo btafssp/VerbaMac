@@ -57,20 +57,21 @@ enum WordsOutputParser: Sendable {
                 }
 
                 let gloss = glossParts.isEmpty ? nil : glossParts.joined(separator: " ")
-                for morphHit in morphHits {
-                    let pos = (dictPOS?.isEmpty == false) ? dictPOS! : morphHit.pos
-                    results.append(
-                        Analysis(
-                            lemma: lemmaDisplay,
-                            lemmaNorm: lemma,
-                            language: .latin,
-                            pos: pos,
-                            morphology: morphHit.morphology,
-                            quantity: citation,
-                            gloss: gloss
-                        )
+                let lemmaDisplayClean = Self.cleanedLemma(lemmaDisplay)
+                let lemmaClean = MorphPreprocess.latinLookupKey(Self.cleanedLemma(lemma))
+                let pos = (dictPOS?.isEmpty == false) ? dictPOS! : (morphHits.first?.pos ?? "unknown")
+                let morphology = MorphologyMerge.combine(morphHits.map(\.morphology))
+                results.append(
+                    Analysis(
+                        lemma: lemmaDisplayClean,
+                        lemmaNorm: lemmaClean,
+                        language: .latin,
+                        pos: pos,
+                        morphology: morphology,
+                        quantity: citation,
+                        gloss: gloss
                     )
-                }
+                )
                 i = j
                 continue
             }
@@ -98,8 +99,8 @@ enum WordsOutputParser: Sendable {
                     let gloss = glossParts.isEmpty ? nil : glossParts.joined(separator: " ")
                     results.append(
                         Analysis(
-                            lemma: dict.lemma,
-                            lemmaNorm: MorphPreprocess.latinLookupKey(dict.lemmaNorm),
+                            lemma: Self.cleanedLemma(dict.lemma),
+                            lemmaNorm: MorphPreprocess.latinLookupKey(Self.cleanedLemma(dict.lemmaNorm)),
                             language: .latin,
                             pos: dict.pos.isEmpty ? "unknown" : dict.pos,
                             morphology: "",
@@ -237,7 +238,7 @@ enum WordsOutputParser: Sendable {
         switch code.uppercased() {
         case "N": return "noun"
         case "V": return "verb"
-        case "ADJ": return "adj."
+        case "ADJ": return "adjective"
         case "ADV": return "adv."
         case "PREP": return "prep."
         case "CONJ": return "conj."
@@ -248,58 +249,82 @@ enum WordsOutputParser: Sendable {
         }
     }
 
+    /// WORDS writes stem.ending (`natural.e`); the lexicon lemma has no dot.
+    private static func cleanedLemma(_ raw: String) -> String {
+        raw.replacingOccurrences(of: ".", with: "")
+    }
+
     private static func formatMorphology(pos: String, tokens: [String]) -> String {
         let u = tokens.map { $0.uppercased() }
-        var parts: [String] = []
 
-        let caseMap = ["NOM": "nom.", "GEN": "gen.", "DAT": "dat.", "ACC": "acc.", "ABL": "abl.", "VOC": "voc."]
-        let numMap = ["S": "sg.", "P": "pl.", "X": ""]
+        let caseMap = ["NOM": "nom", "GEN": "gen", "DAT": "dat", "ACC": "acc", "ABL": "abl", "VOC": "voc"]
         let tenseMap = [
-            "PRES": "pres.", "IMPF": "impf.", "FUT": "fut.",
-            "PERF": "perf.", "PLUP": "plup.", "FUTP": "fut. perf."
+            "PRES": "pres", "IMPF": "impf", "FUT": "fut",
+            "PERF": "perf", "PLUP": "plup", "FUTP": "futp"
         ]
-        let voiceMap = ["ACTIVE": "act.", "PASSIVE": "pass."]
-        let moodMap = ["IND": "ind.", "SUB": "subj.", "IMP": "imp.", "INF": "inf.", "PPL": "ppl."]
+        let voiceMap = ["ACTIVE": "act", "PASSIVE": "pass"]
+        let moodMap = ["IND": "ind", "SUB": "subj", "IMP": "imp", "INF": "inf", "PPL": "ppl"]
         let personMap = ["1": "1st", "2": "2nd", "3": "3rd"]
 
         if pos == "N" || pos == "ADJ" || pos == "PRON" {
+            var gender: String?
+            var cases: [String] = []
+            var number: String?
+            var degree: String?
             for t in u {
-                if let c = caseMap[t] { parts.append(c) }
-            }
-            for t in u {
-                if let n = numMap[t], !n.isEmpty { parts.append(n) }
-            }
-            for t in u where ["M", "F", "N", "C"].contains(t) {
-                if t == "C" {
-                    parts.append("comm.")
-                } else {
-                    parts.append(t.lowercased() + ".")
+                if let c = caseMap[t] {
+                    cases.append(c)
+                } else if t == "S" {
+                    number = "sg"
+                } else if t == "P" {
+                    number = "pl"
+                } else if t == "M" {
+                    gender = "masc"
+                } else if t == "F" {
+                    gender = "fem"
+                } else if t == "N" {
+                    gender = "neut"
+                } else if t == "C" {
+                    gender = "comm."
+                } else if t == "COMP" {
+                    degree = "comp."
+                } else if t == "SUPER" {
+                    degree = "superl."
                 }
             }
-        } else if pos == "V" {
-            for t in u {
-                if let p = personMap[t] { parts.append(p) }
-            }
-            for t in u {
-                if let n = numMap[t], !n.isEmpty { parts.append(n) }
-            }
-            for t in u {
-                if let x = tenseMap[t] { parts.append(x) }
-            }
-            for t in u {
-                if let x = moodMap[t] { parts.append(x) }
-            }
-            for t in u {
-                if let x = voiceMap[t] { parts.append(x) }
-            }
-            if u.contains("INF") && !parts.contains("inf.") {
-                parts.append("inf.")
-            }
+            var parts: [String] = []
+            if let gender { parts.append(gender) }
+            if !cases.isEmpty { parts.append(cases.joined(separator: "/")) }
+            if let number { parts.append(number) }
+            if let degree { parts.append(degree) }
+            return parts.isEmpty ? tokens.joined(separator: " ") : parts.joined(separator: " ")
         }
 
-        if parts.isEmpty {
-            return tokens.joined(separator: " ")
+        if pos == "V" {
+            var tense: String?
+            var mood: String?
+            var voice: String?
+            var person: String?
+            var number: String?
+            // Person is the last 1/2/3 (conjugation numbers come first).
+            for t in u {
+                if let x = tenseMap[t] { tense = x }
+                else if let x = moodMap[t] { mood = x }
+                else if let x = voiceMap[t] { voice = x }
+                else if t == "S" { number = "sg" }
+                else if t == "P" { number = "pl" }
+                else if let p = personMap[t] { person = p }
+            }
+            if u.contains("INF") { mood = "inf" }
+            var parts: [String] = []
+            if let tense { parts.append(tense) }
+            if let mood { parts.append(mood) }
+            if let voice { parts.append(voice) }
+            if let person { parts.append(person) }
+            if let number { parts.append(number) }
+            return parts.isEmpty ? tokens.joined(separator: " ") : parts.joined(separator: " ")
         }
-        return parts.joined(separator: " ")
+
+        return tokens.joined(separator: " ")
     }
 }

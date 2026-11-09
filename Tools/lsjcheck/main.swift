@@ -309,6 +309,61 @@ Task {
     check(natArt?.lemmaNorm == "naturalis", "naturale nested-orth → naturalis: \(natArt?.lemmaNorm ?? "nil")")
     let gr = await wpipe.parse("λόγος", language: .greek)
     check(gr.contains { $0.lemma == "λόγος" }, "regression λόγος: \(gr.map(\.lemma))")
+
+    func present(_ raw: [Analysis], query: String) async -> [Analysis] {
+      var refined: [Analysis] = []
+      for a in raw {
+        let art = await lat.article(for: a)
+        var r = GenderRefiner.refine(a, articleHTML: art?.html)
+        r.headwordLabel = await lat.headwordLabel(for: a)
+        refined.append(r)
+      }
+      return ParserPipeline.exactLemmaFirst(AnalysisMerger.merge(refined), query: query)
+    }
+    func row(_ a: Analysis) -> String {
+      "\(a.displayLemma) | \(a.pos) | \(a.morphology)"
+    }
+    for w in ["memorialia", "memorial", "amo", "custodesque", "naturale", "λόγος"] {
+      let lang: Language = MorphPreprocess.looksGreek(w) ? .greek : .latin
+      let raw = await wpipe.parse(w, language: lang)
+      let ui = await present(raw, query: w)
+      print("GROUPED \(w) (\(ui.count)): \(ui.map(row))")
+    }
+    let miaUI = await present(mia, query: "memorialia")
+    check(miaUI.count == 2, "memorialia groups to 2 rows: \(miaUI.map(row))")
+    check(miaUI.contains { MorphPreprocess.latinLookupKey($0.displayLemma) == "memorialis"
+            && $0.morphology.contains("nom/voc/acc") && $0.morphology.contains("pl") },
+          "memorialia has combined memorialis parse: \(miaUI.map(row))")
+    if let memHit = miaUI.first(where: { $0.lemma.lowercased() == "memorial" }) {
+      check(memHit.morphology == "neut nom/voc/acc pl",
+            "WORDS memorial morph is Morpheus-style: \(memHit.morphology)")
+      check(!memHit.morphology.contains("NOM") && !memHit.morphology.contains("nom."),
+            "WORDS memorial does not keep raw WORDS codes: \(memHit.morphology)")
+      let art = await lat.article(for: memHit)
+      check(art != nil, "merged memorial still loads WORDS gloss article")
+    } else {
+      check(false, "memorialia missing grouped memorial row: \(miaUI.map(row))")
+    }
+    let memUI = await present(mem, query: "memorial")
+    check(memUI.contains { $0.lemma.lowercased() == "memorial" && $0.morphology == "neut nom/voc/acc sg" },
+          "memorial groups cases: \(memUI.map(row))")
+    let amoUI = await present(amo, query: "amo")
+    check(amoUI.count == 1 && amoUI[0].lemma.lowercased() == "amo"
+            && amoUI[0].morphology == "pres ind act 1st sg",
+          "amo stays a single verb parse: \(amoUI.map(row))")
+    let cuUI = await present(qe, query: "custodesque")
+    check(cuUI.count == 1 && cuUI[0].displayLemma == "custos"
+            && cuUI[0].morphology.contains("nom/voc/acc") && cuUI[0].morphology.contains("pl"),
+          "custodesque groups to one custos: \(cuUI.map(row))")
+    let natRaw = await wpipe.parse("naturale", language: .latin)
+    let natUI = await present(natRaw, query: "naturale")
+    check(natUI.contains { MorphPreprocess.latinLookupKey($0.displayLemma) == "naturalis" },
+          "naturale still resolves to naturalis: \(natUI.map(row))")
+    check(natUI.filter { MorphPreprocess.latinLookupKey($0.displayLemma) == "naturalis" }.count == 1,
+          "naturale has one naturalis row: \(natUI.map(row))")
+    let grUI = await present(gr, query: "λόγος")
+    check(grUI.count == 1 && grUI[0].lemma == "λόγος" && grUI[0].morphology == "ὁ nom sg",
+          "λόγος stays a single refined row: \(grUI.map(row))")
   }
   print(fails == 0 ? "ALL PASS" : "\(fails) FAIL"); exit(fails == 0 ? 0 : 1)
 }
